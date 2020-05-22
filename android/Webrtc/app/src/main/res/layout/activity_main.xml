@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:hint="input host"
-        android:inputType="number"
+        android:inputType="textPostalAddress"
         app:layout_constraintRight_toLeftOf="@id/etPort"
         app:layout_constraintStart_toStartOf="@+id/etRoomNumber"
         app:layout_constraintTop_toBottomOf="@id/etRoomNumber" />
