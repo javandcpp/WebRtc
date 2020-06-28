@@ -32,12 +32,12 @@ public class SocketTaskRunnable implements Runnable{
 
     public SocketTaskRunnable(String host, int port, ReadTaskRunnable read,WriteTaskRunnable write){
         try {
-            mSelector = Selector.open();
+//            mSelector = Selector.open();
             this.mHost=host;
             this.mPort=port;
             this.read=read;
             this.wirte=write;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -119,8 +119,8 @@ public class SocketTaskRunnable implements Runnable{
         try {
             mClientChannel.finishConnect();
             selectionKey.interestOps(SelectionKey.OP_READ);
-            selectionKey.interestOps(SelectionKey.OP_ACCEPT);
-            selectionKey.interestOps(SelectionKey.OP_WRITE);
+//            selectionKey.interestOps(SelectionKey.OP_ACCEPT);
+//            selectionKey.interestOps(SelectionKey.OP_WRITE);
             Log.i(TAG, "connected to:" + mClientChannel.socket().getInetAddress());
         } catch (IOException e) {
             e.printStackTrace();
@@ -141,8 +141,8 @@ public class SocketTaskRunnable implements Runnable{
             mClientChannel = SocketChannel.open();
             mClientChannel.configureBlocking(false);
             mClientChannel.connect(new InetSocketAddress(mHost, mPort));
-            mClientChannel.register(mSelector, SelectionKey.OP_CONNECT);
-            startSelector(mSelector);
+//            mClientChannel.register(mSelector, SelectionKey.OP_CONNECT);
+//            startSelector(mSelector);
         } catch (IOException e) {
             e.printStackTrace();
         }
