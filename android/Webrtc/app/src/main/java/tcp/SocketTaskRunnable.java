@@ -32,7 +32,7 @@ public class SocketTaskRunnable implements Runnable{
 
     public SocketTaskRunnable(String host, int port, ReadTaskRunnable read,WriteTaskRunnable write){
         try {
-//            mSelector = Selector.open();
+            mSelector = Selector.open();
             this.mHost=host;
             this.mPort=port;
             this.read=read;
@@ -73,13 +73,15 @@ public class SocketTaskRunnable implements Runnable{
                     try {
                         count = mClientChannel.read(byteBuffer);
                         if (count > 0) {
+
+                            byte[] bytes = new byte[12];
+                            byteBuffer.get(bytes);
+                            int packtype = byteBuffer.getInt();
+                            int content_size = byteBuffer.getInt();
+                            String data=new String(bytes,0,11,StandardCharsets.UTF_8);
+                            Log.d("message", "header:" + data + ",packtype:" + packtype + ",content_size:" + content_size);
+
                             byteBuffer.flip();
-//                            byte[] bytes = new byte[12];
-//                            byteBuffer.get(bytes);
-//                            int packtype = byteBuffer.getInt();
-//                            int content_size = byteBuffer.getInt();
-//                            String data=new String(bytes,0,11,StandardCharsets.UTF_8);
-//                            Log.d("message", "header:" + data + ",packtype:" + packtype + ",content_size:" + content_size);
                         }
 
 
@@ -119,8 +121,8 @@ public class SocketTaskRunnable implements Runnable{
         try {
             mClientChannel.finishConnect();
             selectionKey.interestOps(SelectionKey.OP_READ);
-//            selectionKey.interestOps(SelectionKey.OP_ACCEPT);
-//            selectionKey.interestOps(SelectionKey.OP_WRITE);
+            selectionKey.interestOps(SelectionKey.OP_ACCEPT);
+            selectionKey.interestOps(SelectionKey.OP_WRITE);
             Log.i(TAG, "connected to:" + mClientChannel.socket().getInetAddress());
         } catch (IOException e) {
             e.printStackTrace();
@@ -142,7 +144,7 @@ public class SocketTaskRunnable implements Runnable{
             mClientChannel.configureBlocking(false);
             mClientChannel.connect(new InetSocketAddress(mHost, mPort));
 //            mClientChannel.register(mSelector, SelectionKey.OP_CONNECT);
-//            startSelector(mSelector);
+            startSelector(mSelector);
         } catch (IOException e) {
             e.printStackTrace();
         }
